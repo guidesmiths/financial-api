@@ -16,6 +16,7 @@ const config = {
 		secretKey: process.env.SECRET_KEY || 'finance'
   },
   mongo: {
+    db: 'finance',
     options: {
       auth: {
         user: process.env.MONGO_DB_APP_USERNAME || 'node',
