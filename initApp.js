@@ -1,14 +1,14 @@
 const bodyparser = require('body-parser');
-//const jwt = require('express-jwt');
+const jwtExpress = require('express-jwt');
 const jwt = require('jsonwebtoken');
 
-module.exports = (app, controller) => {
+module.exports = (app, controller, config) => {
     app.use(bodyparser.urlencoded({ extended: true }));
     app.use(bodyparser.json());
 
-    /*app.get('/protected', jwt({secret: config.app.secretKey}),  (req,res) => {
+    app.get('/protected', jwtExpress({ secret: config.app.secretKey }),  (req,res) => {
         res.sendStatus(200);
-    })*/
+    })
 
     app.get('/test', (req, res) =>
         controller.getData()

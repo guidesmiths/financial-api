@@ -14,7 +14,7 @@ module.exports = ({ mongodb, app, config, redis }) => {
         server = app.listen(config.app.port);
         mongoInstance = mongo;
         controller = initController(mongo.db(config.mongo.db), redis);
-        initApp(app, controller);
+        initApp(app, controller, config);
         return { app, controller };
       });
 
