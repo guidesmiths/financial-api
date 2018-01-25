@@ -1,0 +1,28 @@
+{
+  "name": "financial-api",
+  "version": "1.0.0",
+  "description": "A REST secure API exposing financial data",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "docker": "docker-compose --file docker-compose.yml up -d --force-recreate"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/guidesmiths/financial-api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/guidesmiths/financial-api/issues"
+  },
+  "homepage": "https://github.com/guidesmiths/financial-api#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "express-jwt": "^5.3.0",
+    "jsonwebtoken": "^8.1.1",
+    "mongodb": "^3.0.1",
+    "redis": "^2.8.0"
+  }
+}
