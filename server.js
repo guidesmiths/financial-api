@@ -1,10 +1,12 @@
 const express = require('express');
+var cors = require('cors')
 const mongodb = require('mongodb');
 const redis = require('redis');
 
 const initSystem = require('./system');
 
 const app = express();
+app.use(cors())
 const client = redis.createClient();
 client.on("error", console.error);
 

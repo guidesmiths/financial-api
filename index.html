@@ -1,0 +1,101 @@
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Financial-api</title>
+   
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS
+    <link href="css/bootstrap.css" rel="stylesheet">-->
+    <!-- Custom styles for this template -->
+    <style>
+        body {
+            padding-top: 50px;
+        }
+
+        .starter-template {
+            padding: 40px 15px;
+            text-align: center;
+        }
+    </style>
+
+    <!-- Custom Fonts -->
+    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+
+    <link rel="shortcut icon" href="img/favicon.ico" type="img/favicon.icon">
+</head>
+
+<body>
+
+
+<div class="container">
+
+            <h1>Fianncial Api</h1>
+
+            <h2>Login</h2>
+            <label>user</label>
+            <br>
+            <input type="text" name="user" placeholder="user" id="user"></input>
+            <br>
+            <label>password</label>
+            <br>
+            <input type="password" name="password" placeholder="password" id="password"></input> 
+            <br>
+
+            <button onclick="auth()">Login</button>
+            <div id="TokenBox">
+                <p>sdsfa</p>
+            </div>
+            <button>logout</button>
+             <hr>
+             <h2>Test</h2>
+             <button>Get data</button>
+             <pre>{hola:ada}</pre>
+
+
+</div>
+
+<!-- /.container -->
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<!-- Plugin JavaScript -->
+
+<!-- Contact Form JavaScript -->
+
+<!-- Custom Theme JavaScript -->
+
+<script type="text/javascript">
+    
+
+function auth(){
+    const user = $( "#user" ).val();
+    const password = $( "#password" ).val();
+
+    var auth = $.ajax({
+      url: "http://localhost:8080/authenticate",
+      method: "POST",
+      crossDomain: true,
+      data: { user, password },
+      dataType: "json"
+    })
+    .success((msg) => {
+    console.log("S", msg)
+    })
+    .fail(( jqXHR, textStatus ) => {
+    console.log(jqXHR, textStatus);
+    });
+}
+
+
+</script>
+
+</body></html>
