@@ -19,13 +19,12 @@ module.exports = (app, controller, config) => {
         app.use(jwtExpress({ secret: config.app.secretKey }));
         app.get('/index', (req, res) => {
             controller.getData(req.query)
-                .then((data) => {res.json(data) })
+                .then((data) => { res.json(data) })
         });
 
          app.get('/indexes', (req, res) => {
-            console.log(req.user)
             controller.getValues(req.user)
-                .then((data) => { console.log(data); res.json(data) })
+                .then((data) => { res.json(data) })
         });
     };
 
