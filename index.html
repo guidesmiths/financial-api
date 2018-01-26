@@ -71,6 +71,10 @@
     box-shadow: -1px 3px 17px 0 rgba(247, 121, 121, 0.57), 0 6px 20px 0 rgba(247, 121, 121, 0.16);
     /* box-shadow: 0px 5px 9px 1px #79d0f7; */
         }
+        #TokenBox{
+            margin-left: 20px;
+            margin-right: 20px;
+        }
 
         .btn{
              margin: 15px;
@@ -112,6 +116,38 @@
             display: flex;
             /* justify-content: center; */
             align-items: end;
+            margin-left: 20px;
+        }
+
+        #indexList{
+                display: -webkit-box;
+    width: 100%;
+    height: 100px;
+    /* justify-content: center; */
+    align-items: center;
+    background: aliceblue;
+    overflow-x: scroll;
+    /* margin-left: 30px; */
+    /* border-radius: 15px 0px 0px 15px; */
+        }
+        .indexBox{
+                width: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: antiquewhite;
+    margin: 15px;
+    height: calc(100% - 30px);
+    /* margin: 15px; */
+    /* width: 80%; */
+    /* max-width: 300px; */
+    /* height: 40px; */
+    /* border: none; */
+    background: #ffffff;
+    border-radius: 10px;
+    font-weight: bold;
+    box-shadow: -1px 3px 17px 0 rgb(187, 187, 187), 0 6px 20px 0 rgba(121, 208, 247, 0.16);
+    box-shadow: 3px 1px 11px 1px #cecece;
         }
     </style>
 
@@ -124,7 +160,7 @@
 <body>
 
 
-<div class="container">
+<div class="container-flex">
 
             <h1>Financial Api</h1>
 
@@ -149,7 +185,8 @@
              <hr>
              <div id="testBox">
                  <h2>Test</h2>
-                 <button class="btn" onclick="fetchData()">Get data</button>
+            </div>
+            <div id="indexList">
             </div>
              <div id="DataBox">
                 <p>Datos</p>
@@ -205,6 +242,7 @@ function putToken(token){
     $('#loginBox').css({display: 'none'});
     window.sessionStorage.setItem('TOKEN_FINANCIAL_APP', token);
     $('#TokenBox').html('<p>Token:</p><pre>'+token+'</pre>');
+    getValues();
 }
 
 function removeToken(){
@@ -213,14 +251,15 @@ function removeToken(){
     $('#TokenBox').html('<p>Token:</p><pre>no hay token</pre>');
 }
 
-function fetchData(){
+function fetchData(name){
     const token = window.sessionStorage.getItem('TOKEN_FINANCIAL_APP');
     console.log(token);
 
     $.ajax({
-      url: "http://localhost:8080/test",
+      url: "http://localhost:8080/index",
       method: "GET",
       crossDomain: true,
+      data: { name},
       beforeSend: function (xhr) {   //Include the bearer token in header
         xhr.setRequestHeader("Authorization", 'Bearer '+ token);
         },
@@ -235,6 +274,31 @@ function fetchData(){
         console.log(jqXHR, textStatus)
          
     $('#DataBox').html('<p>Datos:</p><pre>Error autorización</pre>');
+    });
+}
+
+
+function getValues(){
+    const token = window.sessionStorage.getItem('TOKEN_FINANCIAL_APP');
+    console.log(token);
+
+    $.ajax({
+      url: "http://localhost:8080/indexes",
+      method: "GET",
+      crossDomain: true,
+      beforeSend: function (xhr) {   //Include the bearer token in header
+        xhr.setRequestHeader("Authorization", 'Bearer '+ token);
+        },
+      dataType: "json"
+    })
+    .success((data) => {
+        $('#indexList').html('');
+        data.forEach((ind) => {
+            $('#indexList').append('<div class="indexBox" onclick="fetchData('+"'"+ind.name+"'"+')">'+ind.name+'</div>')
+        })
+    })
+    .fail(( jqXHR, textStatus ) => {
+        console.log(jqXHR, textStatus)
     });
 }
 

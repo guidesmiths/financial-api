@@ -17,9 +17,14 @@ module.exports = (app, controller, config) => {
 
     const initProtected = () => {
         app.use(jwtExpress({ secret: config.app.secretKey }));
-        app.get('/test', (req, res) => {
+        app.get('/index', (req, res) => {
+            controller.getData(req.query)
+                .then((data) => {res.json(data) })
+        });
+
+         app.get('/indexes', (req, res) => {
             console.log(req.user)
-            controller.getData(req.user)
+            controller.getValues(req.user)
                 .then((data) => { console.log(data); res.json(data) })
         });
     };
