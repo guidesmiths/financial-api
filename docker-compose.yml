@@ -2,7 +2,7 @@ version: "2.1"
 services:
   db:
     build: ./mongo
-    image: feliun/graphql-workshop:mongo
+    image: mongo
     volumes:
       - ./database:/data # volume in host -> $(pwd)/database
     environment:

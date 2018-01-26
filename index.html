@@ -20,14 +20,105 @@
             padding: 40px 15px;
             text-align: center;
         }
+
+        input{
+            line-height: normal;
+            background: #eee;
+            border: saddlebrown;
+            width: 80%;
+            max-width: 300px;
+            height: 40px;
+            border-radius: 5px;
+            padding-left: 10px;
+            margin: auto;
+        }
+
+        #loginBox{
+            display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: left;
+    max-width: 300px;
+    background: #ffffff;
+    box-shadow: 2px 3px 5px 0px #cecece, 0px 4px 11px 0px #929292;
+    border-radius: 5px;
+    margin: 30px auto;
+        }
+
+        #loginBtn{
+                margin: 15px;
+    width: 80%;
+    max-width: 300px;
+    height: 40px;
+    border: none;
+    background: #79d0f7;
+    border-radius: 15px;
+    font-weight: bold;
+    box-shadow: -1px 3px 17px 0 rgba(121, 208, 247, 0.57), 0 6px 20px 0 rgba(121, 208, 247, 0.16);
+    /* box-shadow: 0px 5px 9px 1px #79d0f7; */
+        }
+
+        #logoutBtn{
+                    margin: 15px;
+    width: 80%;
+    max-width: 300px;
+    height: 40px;
+    border: none;
+    background: #f78779;
+    border-radius: 15px;
+    font-weight: bold;
+    box-shadow: -1px 3px 17px 0 rgba(247, 121, 121, 0.57), 0 6px 20px 0 rgba(247, 121, 121, 0.16);
+    /* box-shadow: 0px 5px 9px 1px #79d0f7; */
+        }
+
+        .btn{
+             margin: 15px;
+    /* width: 80%; */
+    /* max-width: 300px; */
+    height: 40px;
+    border: none;
+    background: #79d0f7;
+    border-radius: 15px;
+    font-weight: bold;
+    box-shadow: -1px 3px 17px 0 rgba(121, 208, 247, 0.57), 0 6px 20px 0 rgba(121, 208, 247, 0.16);
+    /* box-shadow: 0px 5px 9px 1px #79d0f7; */
+        }
+
+        #logoutBox{
+           display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: left;
+    max-width: 300px;
+    margin: auto;
+        }
+
+        pre{
+            white-space: pre-wrap;       /* css-3 */
+ white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+ white-space: -pre-wrap;      /* Opera 4-6 */
+ white-space: -o-pre-wrap;    /* Opera 7 */
+ word-wrap: break-word;
+        }
+
+        #error{
+            color: #f78779;
+            display: none;
+        }
+
+        #testBox{
+            display: flex;
+            /* justify-content: center; */
+            align-items: end;
+        }
     </style>
 
     <!-- Custom Fonts -->
-    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
     <link href="http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
 
-    <link rel="shortcut icon" href="img/favicon.ico" type="img/favicon.icon">
 </head>
 
 <body>
@@ -35,27 +126,35 @@
 
 <div class="container">
 
-            <h1>Fianncial Api</h1>
+            <h1>Financial Api</h1>
 
+            <div id="loginBox">
             <h2>Login</h2>
             <label>user</label>
-            <br>
             <input type="text" name="user" placeholder="user" id="user"></input>
-            <br>
             <label>password</label>
-            <br>
             <input type="password" name="password" placeholder="password" id="password"></input> 
-            <br>
-
-            <button onclick="auth()">Login</button>
-            <div id="TokenBox">
-                <p>sdsfa</p>
+            <div id="error"><p>error login</p></div>
+            <button id="loginBtn" onclick="auth()">Login</button>
             </div>
-            <button>logout</button>
+
+            
+            <div id="TokenBox">
+                <p>Token</p>
+                <pre>no hay token</pre>
+            </div>
+            <div id="logoutBox">
+            <button id="logoutBtn" onclick="removeToken()">logout</button>
+            </div>
              <hr>
-             <h2>Test</h2>
-             <button>Get data</button>
-             <pre>{hola:ada}</pre>
+             <div id="testBox">
+                 <h2>Test</h2>
+                 <button class="btn" onclick="fetchData()">Get data</button>
+            </div>
+             <div id="DataBox">
+                <p>Datos</p>
+                <pre>no hay datos</pre>
+            </div>
 
 
 </div>
@@ -80,18 +179,62 @@ function auth(){
     const user = $( "#user" ).val();
     const password = $( "#password" ).val();
 
-    var auth = $.ajax({
+    $.ajax({
       url: "http://localhost:8080/authenticate",
       method: "POST",
       crossDomain: true,
       data: { user, password },
       dataType: "json"
     })
-    .success((msg) => {
-    console.log("S", msg)
+    .success((data) => {
+        $('#error').css({display: 'none'});
+        if(data.token){
+            putToken(data.token);
+        }else{
+            removeToken()
+        }
     })
     .fail(( jqXHR, textStatus ) => {
-    console.log(jqXHR, textStatus);
+        removeToken();
+        $('#error').css({display: 'block'});
+        window.setTimeout(function(){ $('#error').css({display: 'none'}) }, 3000);
+    });
+}
+
+function putToken(token){
+    $('#loginBox').css({display: 'none'});
+    window.sessionStorage.setItem('TOKEN_FINANCIAL_APP', token);
+    $('#TokenBox').html('<p>Token:</p><pre>'+token+'</pre>');
+}
+
+function removeToken(){
+    window.sessionStorage.clear()
+    $('#loginBox').css({display: 'flex'});
+    $('#TokenBox').html('<p>Token:</p><pre>no hay token</pre>');
+}
+
+function fetchData(){
+    const token = window.sessionStorage.getItem('TOKEN_FINANCIAL_APP');
+    console.log(token);
+
+    $.ajax({
+      url: "http://localhost:8080/test",
+      method: "GET",
+      crossDomain: true,
+      beforeSend: function (xhr) {   //Include the bearer token in header
+        xhr.setRequestHeader("Authorization", 'Bearer '+ token);
+        },
+      dataType: "json"
+    })
+    .success((data) => {
+        console.log(data);
+         
+    $('#DataBox').html('<p>Datos:</p><pre>'+JSON.stringify(data, undefined, 2)+'</pre>');
+    })
+    .fail(( jqXHR, textStatus ) => {
+        console.log(jqXHR, textStatus)
+         
+    $('#DataBox').html('<p>Datos:</p><pre>Error autorización</pre>');
     });
 }
 

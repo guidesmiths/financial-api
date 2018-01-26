@@ -13,6 +13,17 @@ module.exports = ({ mongodb, app, config, redis }) => {
         console.log('Connected to mongo DB!');
         server = app.listen(config.app.port);
         mongoInstance = mongo;
+        const store = mongoInstance.db('finance');
+        const collection = store.collection('data');
+        console.log(store);
+        console.log(collection);
+
+        collection.find({}).toArray(function(err, docs) {
+
+    console.log("Found the following records");
+    console.log(docs)
+  });
+
         controller = initController(mongo.db(config.mongo.db), redis);
         initApp(app, controller, config);
         return { app, controller };

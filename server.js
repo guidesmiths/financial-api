@@ -1,6 +1,6 @@
 const express = require('express');
 var cors = require('cors')
-const mongodb = require('mongodb');
+const mongodb = require('mongodb').MongoClient;
 const redis = require('redis');
 
 const initSystem = require('./system');
