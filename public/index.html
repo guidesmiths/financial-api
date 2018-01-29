@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Financial-api</title>
-   
+
 
     <!-- Bootstrap core CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
@@ -161,7 +161,7 @@
 <body>
 
 
-<div class="container-flex">
+<div class="container">
 
             <h1>Financial Api</h1>
 
@@ -170,12 +170,12 @@
             <label>user</label>
             <input type="text" name="user" placeholder="user" id="user"></input>
             <label>password</label>
-            <input type="password" name="password" placeholder="password" id="password"></input> 
+            <input type="password" name="password" placeholder="password" id="password"></input>
             <div id="error"><p>error login</p></div>
             <button id="loginBtn" onclick="auth()">Login</button>
             </div>
 
-            
+
             <div id="TokenBox">
                 <p>Token</p>
                 <pre>no hay token</pre>
@@ -213,14 +213,14 @@
 <!-- Custom Theme JavaScript -->
 
 <script type="text/javascript">
-    
+
 
 function auth(){
     const user = $( "#user" ).val();
     const password = $( "#password" ).val();
 
     $.ajax({
-      url: "http://localhost:8080/authenticate",
+      url: "./authenticate",
       method: "POST",
       crossDomain: true,
       data: { user, password },
@@ -259,7 +259,7 @@ function fetchData(name){
     console.log(token);
 
     $.ajax({
-      url: "http://localhost:8080/index",
+      url: "./index",
       method: "GET",
       crossDomain: true,
       data: { name},
@@ -271,7 +271,7 @@ function fetchData(name){
     })
     .success((data) => {
         console.log(data);
-         
+
     $('#DataBox').html('<p>Datos:</p><pre>'+JSON.stringify(data, undefined, 2)+'</pre>');
     })
     .fail(( jqXHR, textStatus ) => {
@@ -282,7 +282,7 @@ function fetchData(name){
         }else{
             $('#DataBox').html('<p>Datos:</p><pre>Error autorización</pre>');
         }
-        
+
     });
 }
 
@@ -292,7 +292,7 @@ function getValues(){
     console.log(token);
 
     $.ajax({
-      url: "http://localhost:8080/indexes",
+      url: "./indexes",
       method: "GET",
       crossDomain: true,
       beforeSend: function (xhr) {   //Include the bearer token in header

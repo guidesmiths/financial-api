@@ -9,22 +9,23 @@ const app = express();
 app.use(cors())
 app.use(express.static('public'));
 
-const redisClient = redis.createClient();
-redisClient.on("error", console.error);
-
 const args = process.argv;
 
 const config = {
-	app: {
-		port: process.env.PORT || 8080,
-		secretKey: process.env.SECRET_KEY || 'finance', 
+  app: {
+    port: process.env.PORT || 8080,
+		secretKey: process.env.SECRET_KEY || 'finance',
   },
   rateLimiter: {
     number: 5,
     rate: '5/minute'
   },
+  redis: {
+    host: process.env.REDIS_HOST || '127.0.0.1'
+  },
   mongo: {
     db: 'finance',
+    host: process.env.MONGO_HOST || '127.0.0.1',
     options: {
       auth: {
         user: process.env.MONGO_DB_APP_USERNAME || 'node',
@@ -36,6 +37,9 @@ const config = {
     }
   }
 };
+
+const redisClient = redis.createClient(config.redis);
+redisClient.on("error", console.error);
 
 const system = initSystem({ mongodb, app, config, redisClient, rateLimiter});
 

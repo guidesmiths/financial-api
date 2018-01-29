@@ -8,7 +8,7 @@ module.exports = ({ mongodb, app, config, redisClient, rateLimiter }) => {
   let controller;
 
   const start = () =>
-    mongodb.connect('mongodb://127.0.0.1/finance', config.mongo.options)
+    mongodb.connect(`mongodb://${config.mongo.host}/finance`, config.mongo.options)
       .then((mongo) => {
         console.log('Connected to mongo DB!');
         server = app.listen(config.app.port);
