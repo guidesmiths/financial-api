@@ -1,8 +1,15 @@
 const bodyparser = require('body-parser');
 const jwtExpress = require('express-jwt');
 const jwt = require('jsonwebtoken');
+const path = require('path');
 
 module.exports = (app, controller, config, redisClient, rateLimiter) => {
+
+    const view = () => {
+        app.get('/', (req, res) => {
+            res.sendFile(path.join(__dirname + '/index.html'));
+        });
+    }
 
     const initUnprotected = () => {
         app.post('/authenticate', (req, res) =>
@@ -22,7 +29,6 @@ module.exports = (app, controller, config, redisClient, rateLimiter) => {
         app.use(jwtExpress({ secret: config.app.secretKey }));
         app.use(checkRate);
         app.get('/index', (req, res) => {
-            console.log(req.user);
             controller.getData(req.query)
                 .then((data) => { res.json(data) })
         });
@@ -41,7 +47,9 @@ module.exports = (app, controller, config, redisClient, rateLimiter) => {
 
     app.use(bodyparser.urlencoded({ extended: true }));
     app.use(bodyparser.json());
+    view();
     initUnprotected();
     initProtected();
+
 };
 
