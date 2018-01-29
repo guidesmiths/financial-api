@@ -7,7 +7,7 @@ module.exports = (mongo, redis, rateLimiter) => {
 
     const getValues = ({})  => store.find({}).project({name: 1}).toArray();
 
-    const verifyUser = (user, pwd) => storeUser.findOne({name: user});
+    const verifyUser = (user, pwd) => storeUser.findOne({ name: user, password: pwd });
 
     return { getData, getValues, verifyUser };
 };
