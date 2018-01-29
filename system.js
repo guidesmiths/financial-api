@@ -1,7 +1,7 @@
 const initApp = require('./initApp');
 const initController = require('./controller');
 
-module.exports = ({ mongodb, app, config, redis }) => {
+module.exports = ({ mongodb, app, config, redisClient, rateLimiter }) => {
 
   let server;
   let mongoInstance;
@@ -13,8 +13,8 @@ module.exports = ({ mongodb, app, config, redis }) => {
         console.log('Connected to mongo DB!');
         server = app.listen(config.app.port);
         mongoInstance = mongo;
-        controller = initController(mongo.db(config.mongo.db), redis);
-        initApp(app, controller, config);
+        controller = initController(mongo.db(config.mongo.db), redisClient, rateLimiter);
+        initApp(app, controller, config, redisClient, rateLimiter);
         return { app, controller };
       });
 

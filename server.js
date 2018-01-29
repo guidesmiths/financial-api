@@ -2,13 +2,13 @@ const express = require('express');
 var cors = require('cors')
 const mongodb = require('mongodb').MongoClient;
 const redis = require('redis');
-
+var rateLimiter = require('redis-rate-limiter');
 const initSystem = require('./system');
 
 const app = express();
 app.use(cors())
-const client = redis.createClient();
-client.on("error", console.error);
+const redisClient = redis.createClient();
+redisClient.on("error", console.error);
 
 const args = process.argv;
 
@@ -31,7 +31,7 @@ const config = {
   }
 };
 
-const system = initSystem({ mongodb, app, config, redis });
+const system = initSystem({ mongodb, app, config, redisClient, rateLimiter});
 
 system.start()
   .then(() => console.log(`Server listening at localhost:${config.app.port}`))

@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "docker": "docker-compose --file docker-compose.yml up -d --force-recreate"
+    "docker": "docker-compose --file docker-compose.yml up -d --force-recreate --build"
   },
   "repository": {
     "type": "git",
@@ -24,6 +24,7 @@
     "express-jwt": "^5.3.0",
     "jsonwebtoken": "^8.1.1",
     "mongodb": "^3.0.1",
-    "redis": "^2.8.0"
+    "redis": "^2.8.0",
+    "redis-rate-limiter": "^1.1.0"
   }
 }
