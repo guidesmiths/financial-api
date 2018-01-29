@@ -7,10 +7,13 @@ module.exports = (app, controller, config, redisClient, rateLimiter) => {
     const initUnprotected = () => {
         app.post('/authenticate', (req, res) =>
             controller.verifyUser(req.body.user, req.body.password)
-                .then((userData) => res.json({
+                .then((userData) => {
+                    delete userData.password;
+                    res.json({
                         message: 'Enjoy your token!',
                         token: jwt.sign(userData, config.app.secretKey , { expiresIn: 60 * 60 })
-                    }))
+                    })
+                })
                 .catch((error) => res.status(401).send({ error }))
         );
     };
@@ -19,6 +22,7 @@ module.exports = (app, controller, config, redisClient, rateLimiter) => {
         app.use(jwtExpress({ secret: config.app.secretKey }));
         app.use(checkRate);
         app.get('/index', (req, res) => {
+            console.log(req.user);
             controller.getData(req.query)
                 .then((data) => { res.json(data) })
         });
@@ -31,7 +35,7 @@ module.exports = (app, controller, config, redisClient, rateLimiter) => {
 
     const checkRate = rateLimiter.middleware({
         redis: redisClient,
-        key: 'ip',
+        key: (req) => req.user.id,
         rate: '5/minute'
     });
 

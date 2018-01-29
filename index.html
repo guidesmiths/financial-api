@@ -273,8 +273,13 @@ function fetchData(name){
     })
     .fail(( jqXHR, textStatus ) => {
         console.log(jqXHR, textStatus)
-         
-    $('#DataBox').html('<p>Datos:</p><pre>Error autorización</pre>');
+        console.log(jqXHR.status);
+        if(jqXHR.status === 429){
+            $('#DataBox').html('<p>Datos:</p><pre>Límite excedido</pre>');
+        }else{
+            $('#DataBox').html('<p>Datos:</p><pre>Error autorización</pre>');
+        }
+        
     });
 }
 
