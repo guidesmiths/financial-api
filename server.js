@@ -17,7 +17,11 @@ const args = process.argv;
 const config = {
 	app: {
 		port: process.env.PORT || 8080,
-		secretKey: process.env.SECRET_KEY || 'finance'
+		secretKey: process.env.SECRET_KEY || 'finance', 
+  },
+  rateLimiter: {
+    number: 5,
+    rate: '5/minute'
   },
   mongo: {
     db: 'finance',

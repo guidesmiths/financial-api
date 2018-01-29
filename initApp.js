@@ -28,6 +28,7 @@ module.exports = (app, controller, config, redisClient, rateLimiter) => {
     const initProtected = () => {
         app.use(jwtExpress({ secret: config.app.secretKey }));
         app.use(checkRate);
+        app.use(updateRateHeaders);
         app.get('/index', (req, res) => {
             controller.getData(req.query)
                 .then((data) => { res.json(data) })
@@ -42,8 +43,16 @@ module.exports = (app, controller, config, redisClient, rateLimiter) => {
     const checkRate = rateLimiter.middleware({
         redis: redisClient,
         key: (req) => req.user.id,
-        rate: '5/minute'
+        rate: config.rateLimiter.rate
     });
+
+    const updateRateHeaders = (req,res,next) => {
+         res.append('X-Rate-Limit', config.rateLimiter.rate);
+         redisClient.get('ratelimit:'+req.user.id, (err, reply) => {
+            res.append('X-Rate-Limit-Remaining', config.rateLimiter.number - reply);
+            next();
+         });
+    }
 
     app.use(bodyparser.urlencoded({ extended: true }));
     app.use(bodyparser.json());

@@ -187,6 +187,8 @@
              <div id="testBox">
                  <h2>Test</h2>
             </div>
+            <strong id="remaining"> </strong>
+            <strong id="limit"></strong>
             <div id="indexList">
             </div>
              <div id="DataBox">
@@ -264,6 +266,7 @@ function fetchData(name){
       beforeSend: function (xhr) {   //Include the bearer token in header
         xhr.setRequestHeader("Authorization", 'Bearer '+ token);
         },
+      complete: function(resp){ getHeaders(resp)},
       dataType: "json"
     })
     .success((data) => {
@@ -295,6 +298,7 @@ function getValues(){
       beforeSend: function (xhr) {   //Include the bearer token in header
         xhr.setRequestHeader("Authorization", 'Bearer '+ token);
         },
+      complete: function(resp){ getHeaders(resp)},
       dataType: "json"
     })
     .success((data) => {
@@ -308,6 +312,20 @@ function getValues(){
     });
 }
 
+function getHeaders(resp){
+    const arrHeaders = resp.getAllResponseHeaders().split('\n');
+    const remaining = getValueFromHeader(arrHeaders,'x-rate-limit-remaining');
+    $('#remaining').text('remaining:'+remaining)
+    const limit = getValueFromHeader(arrHeaders,'x-rate-limit');
+    $('#limit').text('of limit:'+limit)
+}
+
+function getValueFromHeader(arr,str){
+    let filtered = arr.filter((line) => line.split(':')[0] === str)[0].split(':');
+    if(filtered.length <= 0) return '';
+    filtered.shift();
+    return filtered.join(':');
+}
 
 </script>
 
