@@ -24,7 +24,7 @@
     "express-jwt": "^5.3.0",
     "jsonwebtoken": "^8.1.1",
     "mongodb": "^3.0.1",
-    "redis": "^2.8.0",
+    "redis": "^3.1.1",
     "redis-rate-limiter": "^1.1.0"
   }
 }
