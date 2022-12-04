@@ -18,9 +18,9 @@
   },
   "homepage": "https://github.com/guidesmiths/financial-api#readme",
   "dependencies": {
-    "body-parser": "^1.18.2",
+    "body-parser": "^1.19.2",
     "cors": "^2.8.4",
-    "express": "^4.16.2",
+    "express": "^4.17.3",
     "express-jwt": "^5.3.0",
     "jsonwebtoken": "^8.1.1",
     "mongodb": "^3.0.1",
